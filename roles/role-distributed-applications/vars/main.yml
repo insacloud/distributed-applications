@@ -5,4 +5,4 @@ da_required_packages:
   - haproxy
   - mysql-server
 
-da_etherpad_repo: https://github.com/ether/etherpad-lite.git
+da_etherpad_repo: https://github.com/ether/etherpad-docker.git
