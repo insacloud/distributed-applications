@@ -9,7 +9,7 @@ apt-get update -y
 apt-get install python-pip python-dev git -y
 pip install -Iv ansible==1.9.3
 # set permissions
-for i in `find . -type f \( -name "hosts" \)`; do    sed -i 's/\r//' $i && chmod +x $i ; done
+for i in `find . -type f \( -name "hosts" \)`; do sed -i 's/\r//' $i && chmod +x $i ; done
 
 # ssh key
 mkdir -p /root/.ssh/
