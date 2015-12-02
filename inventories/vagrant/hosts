@@ -1,0 +1,9 @@
+#!/bin/bash
+# -*- mode: bash; -*-
+# this syntax make the playbook runnable via windows+vagrant
+
+cat<<EOF
+{
+  "all": [ "localhost" ]
+}
+EOF
