@@ -1,1 +1,4 @@
 ---
+da_required_packages:
+  - docker
+  - haproxy

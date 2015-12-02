@@ -1,1 +1,4 @@
 ---
+- name: Install required packages
+  apt: "name={{item}} state=latest"
+  with_items: "{{da_required_packages}}"
