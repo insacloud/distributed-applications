@@ -1,8 +1,12 @@
 ---
 da_required_packages:
   - sudo
-  - docker
   - haproxy
   - mysql-server
+  - python-mysqldb
+
+da_required_pip:
+  - docker-py
+  - requests
 
 da_etherpad_repo: https://github.com/ether/etherpad-docker.git

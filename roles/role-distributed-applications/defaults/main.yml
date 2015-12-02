@@ -2,7 +2,13 @@
 da_ehterpad_repo_path: /home/vagrant/etherpad_repo
 da_user: vagrant
 
-da_docker_image_name: etherpad-docker
+da_docker_image_name: "{{da_user}}/etherpad-docker"
+
+####################################################################### mysql #
+
+da_mysql_db_name: etherpad
+da_mysql_user_name: etherpad
+da_mysql_user_password: etherpad
 
 ###################################################### etherpad settings.json #
 
@@ -14,10 +20,10 @@ da_etherpad_admin_password: admin
 # da_etherpad_db_dbtype: dirty
 # da_etherpad_db_filename: var/dirty.db
 da_etherpad_db_dbtype: mysql
-da_etherpad_db_user: etherpad
+da_etherpad_db_user: "{{da_mysql_user_name}}"
 da_etherpad_db_host: localhost
-da_etherpad_db_password: etherpad
-da_etherpad_db_database: etherpad
+da_etherpad_db_password: "{{da_mysql_user_password}}"
+da_etherpad_db_database: "{{da_mysql_db_name}}"
 
 da_etherpad_plugins:
   - ep_adminpads

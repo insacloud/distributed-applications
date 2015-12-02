@@ -3,16 +3,36 @@
   apt: "name={{item}} state=latest"
   with_items: "{{da_required_packages}}"
 
+- name: Install pip packages
+  pip: name={{item}}
+  with_items: "{{da_required_pip}}"
+
+- name: Create DB
+  mysql_db: "name={{da_mysql_db_name}} state=present"
+
+- name: Create DB user
+  mysql_user: "name={{da_mysql_user_name}} password={{da_mysql_user_password}} priv={{da_mysql_db_name}}.*:ALL state=present"
+
+- name: Check if docker package is installed
+  command: "dpkg-query -l docker-engine"
+  register: deb_check
+  changed_when: False
+  ignore_errors: True
+
+- name: install docker
+  shell: curl -sSL https://get.docker.com/ | sh
+  when: deb_check.stderr.find('no packages found') != -1
+
 - name: Create etherpad repo dir
   file: "path={{da_ehterpad_repo_path}} state=directory owner={{da_user}} group={{da_user}}"
 
-- name: Clone etherpad project
-  git: "repo={{da_etherpad_repo}} dest={{da_ehterpad_repo_path}} force=yes"
-  sudo_user: "{{da_user}}"
+# - name: Clone etherpad project
+#   git: "repo={{da_etherpad_repo}} dest={{da_ehterpad_repo_path}} force=yes"
+#   sudo_user: "{{da_user}}"
 
 - name: Set etherpad conf file
   template: "src=settings.json.j2 dest={{da_ehterpad_repo_path}}/settings.json owner={{da_user}} group={{da_user}} mode=0644"
 
-# - name: Build docker image
-#   docker_image: "name={{da_docker_image_name}} path={{ hellobaby_build_dir }} state=build
-#   shell: "docker build -t {{da_user}}/etherpad-docker ."
+- name: Build docker image
+  docker_image: "name={{da_docker_image_name}} path={{da_ehterpad_repo_path}} state=build"
+  # sudo_user: "{{da_user}}"
