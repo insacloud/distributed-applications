@@ -2,3 +2,6 @@
 - name: Install required packages
   apt: "name={{item}} state=latest"
   with_items: "{{da_required_packages}}"
+
+- name: Clone etherpad project
+  git: "repo={{da_etherpad_repo}} dest=/home/vagrant/etherpad_repo force=yes"

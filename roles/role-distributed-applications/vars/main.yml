@@ -3,3 +3,6 @@ da_required_packages:
   - sudo
   - docker
   - haproxy
+  - mysql-server
+
+da_etherpad_repo: git://github.com/ether/etherpad-docker.git
