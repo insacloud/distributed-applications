@@ -10,12 +10,11 @@ apt-get install python-pip python-dev git -y
 pip install -Iv ansible==1.9.3
 # set permissions
 for i in `find . -type f \( -name "hosts" \)`; do    sed -i 's/\r//' $i && chmod +x $i ; done
-chown vagrant:vagrant /home/vagrant/.ssh/id_rsa && chmod 600 /home/vagrant/.ssh/id_rsa
 
 # ssh key
 mkdir -p /root/.ssh/
 su $USER <<EOF
-ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
+ssh-keygen -t rsa -N "" -f "/home/$USER/.ssh/id_rsa"
 EOF
 cat "/home/$USER/.ssh/id_rsa.pub" | tee -a /root/.ssh/authorized_keys
 su $USER <<EOF

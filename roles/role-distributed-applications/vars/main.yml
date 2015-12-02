@@ -1,4 +1,6 @@
 ---
 da_required_packages:
+  - sudo
   - docker
   - haproxy
+  
