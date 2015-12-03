@@ -1,4 +1,6 @@
 ---
 - hosts: da
   roles:
+    - geerlingguy.mysql
     - role-distributed-applications
+    - geerlingguy.haproxy

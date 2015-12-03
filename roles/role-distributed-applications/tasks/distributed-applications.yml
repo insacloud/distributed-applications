@@ -7,12 +7,6 @@
   pip: name={{item}}
   with_items: "{{da_required_pip}}"
 
-- name: Create DB
-  mysql_db: "name={{da_mysql_db_name}} state=present"
-
-- name: Create DB user
-  mysql_user: "name={{da_mysql_user_name}} password={{da_mysql_user_password}} priv={{da_mysql_db_name}}.*:ALL state=present host=%"
-
 - name: Check if docker package is installed
   command: "dpkg-query -l docker-engine"
   register: deb_check
@@ -22,6 +16,10 @@
 - name: install docker
   shell: curl -sSL https://get.docker.com/ | sh
   when: deb_check.stderr.find('no packages found') != -1
+
+- name: Get docker0 ip
+  shell: echo $(ip addr | awk '/inet/ && /docker0/{sub(/\/.*$/,"",$2); print $2}')
+  register: __host_ip_docker0
 
 - name: Create etherpad repo dir
   file: "path={{da_ehterpad_repo_path}} state=directory owner={{da_user}} group={{da_user}}"
@@ -38,10 +36,11 @@
 
 - name: Run docker
   docker:
-    name: test1
+    name: "{{item.name}}"
     image: "{{da_docker_image_name}}"
     state: reloaded
     net: bridge
     # expose: "9001"
-    # ports:
-    # - "80:9001"
+    ports:
+    - "{{item.ports}}"
+  with_items: "{{da_docker_instances}}"
