@@ -41,6 +41,7 @@
     name: test1
     image: "{{da_docker_image_name}}"
     state: reloaded
-    net: host
-    expose: "9001"
-    ports: "80:9001"
+    net: bridge
+    # expose: "9001"
+    # ports:
+    # - "80:9001"
