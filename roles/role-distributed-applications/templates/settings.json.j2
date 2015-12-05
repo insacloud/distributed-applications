@@ -28,6 +28,11 @@
     {% endif %} 
   },
 
+  "socketioSettings" : {
+    "host"  : "{{da_etherpad_redis_host}}",
+    "port"  : {{da_etherpad_redis_port}}
+  },
+
   "users": {
     "{{da_etherpad_admin_name}}": {
       "password": "{{da_etherpad_admin_password}}",

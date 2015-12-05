@@ -32,6 +32,24 @@ haproxy_backend_httpchk: 'HEAD / HTTP/1.1\r\nHost:localhost'
 # List of backend servers.
 haproxy_backend_servers: "{{da_docker_instances}}"
 
+####################################################################### redis #
+
+redis_port: 6379
+redis_bind_interface: 0.0.0.0
+redis_unixsocket: ''
+redis_timeout: 300
+
+redis_loglevel: "notice"
+redis_logfile: /var/log/redis/redis-server.log
+
+redis_databases: 16
+
+# Set to an empty set to disable persistence (saving the DB to disk).
+redis_save:
+  - 900 1
+  - 300 10
+  - 60 10000
+
 ####################################################################### mysql #
 
 da_mysql_db_name: etherpad
@@ -81,6 +99,9 @@ da_etherpad_db_user: "{{da_mysql_user_name}}"
 da_etherpad_db_host: "{{__host_ip_docker0.stdout}}"
 da_etherpad_db_password: "{{da_mysql_user_password}}"
 da_etherpad_db_database: "{{da_mysql_db_name}}"
+
+da_etherpad_redis_host: "{{__host_ip_docker0.stdout}}"
+da_etherpad_redis_port: "{{redis_port}}"
 
 da_etherpad_plugins:
   - ep_adminpads

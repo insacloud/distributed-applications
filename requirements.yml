@@ -1,3 +1,4 @@
 ---
 - role: geerlingguy.mysql
+- role: geerlingguy.redis
 - role: geerlingguy.haproxy

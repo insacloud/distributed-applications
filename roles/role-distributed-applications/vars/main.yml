@@ -11,3 +11,4 @@ da_required_pip:
 
 #da_etherpad_repo: https://github.com/ether/etherpad-docker.git
 da_etherpad_repo: https://github.com/mthoretton/etherpad-docker.git
+da_etherpad_repo_version: scalable

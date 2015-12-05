@@ -25,7 +25,7 @@
   file: "path={{da_ehterpad_repo_path}} state=directory owner={{da_user}} group={{da_user}}"
 
 - name: Clone etherpad project
-  git: "repo={{da_etherpad_repo}} dest={{da_ehterpad_repo_path}} force=yes"
+  git: "repo={{da_etherpad_repo}} dest={{da_ehterpad_repo_path}} force=yes version={{da_etherpad_repo_version}}"
   sudo_user: "{{da_user}}"
 
 - name: Set etherpad conf file
