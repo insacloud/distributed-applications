@@ -38,7 +38,7 @@
   docker:
     name: "{{item.name}}"
     image: "{{da_docker_image_name}}"
-    state: reloaded
+    state: restarted
     net: bridge
     # expose: "9001"
     ports:
@@ -49,7 +49,7 @@
   docker:
     name: seagull
     image: tobegit3hub/seagull
-    state: reloaded
+    state: restarted
     volumes: "/var/run/docker.sock:/var/run/docker.sock"
     expose: 10086
     ports: "10086:10086"
@@ -58,6 +58,6 @@
   docker:
     name: prometheus
     image: prom/prometheus
-    state: reloaded
+    state: restarted
     expose: 9090
     ports: "9090:9090"
