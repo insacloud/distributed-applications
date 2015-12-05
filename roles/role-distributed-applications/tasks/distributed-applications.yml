@@ -44,3 +44,20 @@
     ports:
     - "{{item.ports}}"
   with_items: "{{da_docker_instances}}"
+
+- name: Run Seagull (docker monitoring)
+  docker:
+    name: seagull
+    image: tobegit3hub/seagull
+    state: reloaded
+    volumes: "/var/run/docker.sock:/var/run/docker.sock"
+    expose: 10086
+    ports: "10086:10086"
+
+- name: Run prometheus (docker monitoring)
+  docker:
+    name: prometheus
+    image: prom/prometheus
+    state: reloaded
+    expose: 9090
+    ports: "9090:9090"
