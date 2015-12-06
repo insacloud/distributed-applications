@@ -9,6 +9,6 @@ da_required_pip:
   - docker-py
   - requests
 
-#da_etherpad_repo: https://github.com/ether/etherpad-docker.git
-da_etherpad_repo: https://github.com/mthoretton/etherpad-docker.git
-da_etherpad_repo_version: scalable
+#da_etherpad_docker_repo: https://github.com/ether/etherpad-docker.git
+da_etherpad_docker_repo: https://github.com/mthoretton/etherpad-docker.git
+da_etherpad_docker_repo_version: scalable
