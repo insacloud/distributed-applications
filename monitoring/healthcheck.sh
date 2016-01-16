@@ -19,6 +19,7 @@ do
 	status=`docker ps | grep $container`
 	if [ -z "$status" ]; then
 		echo "$container is down /!\\, starting new"
+		/vagrant/monitoring/launch.sh $i
 	else
 		echo "$container is up"
 		toCheck="$toCheck $container"
@@ -57,4 +58,5 @@ echo "Average RAM load: $avgRAM / 10000 - thr: $RAMTHRESHOLD"
 
 if [ $avgCPU -gt $CPUTHRESHOLD ] || [ $avgRAM -gt $RAMTHRESHOLD ]; then
 	echo "Load too high, starting instance"
+	/vagrant/monitoring/launch.sh
 fi
