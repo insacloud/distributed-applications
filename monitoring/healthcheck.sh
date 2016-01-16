@@ -1,6 +1,15 @@
 #!/bin/bash
 echo "---- Checking if containers are alive"
-n=3
+if [ -z "$CPUTHRESHOLD" ]; then
+	CPUTHRESHOLD=1000
+fi
+if [ -z "$RAMTHRESHOLD" ]; then
+	RAMTHRESHOLD=1000
+fi
+if [ -z "$INSTANCESMIN" ]; then
+	INSTANCESMIN=2
+fi
+n=$INSTANCESMIN
 nn=0
 toCheck=""
 prefix="etherpad_"
@@ -9,7 +18,7 @@ do
 	container=$prefix$i
 	status=`docker ps | grep $container`
 	if [ -z "$status" ]; then
-		echo "$container is down /!\\"
+		echo "$container is down /!\\, starting new"
 	else
 		echo "$container is up"
 		toCheck="$toCheck $container"
@@ -21,7 +30,6 @@ echo "---- Checking stats for $nn containers"
 statsFile="/tmp/dockerstats"
 echo 0 > /tmp/sCPU
 echo 0 > /tmp/sRAM
-echo 0 > /tmp/sNET
 # Check stats
 docker stats --no-stream $toCheck > $statsFile
 # Aggro stats
@@ -30,20 +38,23 @@ cat $statsFile | grep $prefix | while read line; do
 	IFS=' ' read -ra arr <<< "$line"
 	cpu=${arr[1]::-1}
 	ram=${arr[7]::-1}
-	net=${arr[8]}
-	echo $cpu $ram $net
 
 	sCPU=`cat /tmp/sCPU`
 	echo $sCPU + $cpu | bc > /tmp/sCPU
 	sRAM=`cat /tmp/sRAM`
 	echo $sRAM + $ram | bc > /tmp/sRAM
-	sNET=`cat /tmp/sNET`
-	echo $sNET + $ram | bc > /tmp/sNET
 done
 
 sCPU=`cat /tmp/sCPU`
 sRAM=`cat /tmp/sRAM`
-sNET=`cat /tmp/sCPU`
 
+# Yes, it's in /10 000
 avgCPU=`echo "$sCPU * 100 / $nn" | bc`
-echo $avgCPU
+avgRAM=`echo "$sRAM * 100 / $nn" | bc`
+
+echo "Average CPU load: $avgCPU / 10000 - thr: $CPUTHRESHOLD"
+echo "Average RAM load: $avgRAM / 10000 - thr: $RAMTHRESHOLD"
+
+if [ $avgCPU -gt $CPUTHRESHOLD ] || [ $avgRAM -gt $RAMTHRESHOLD ]; then
+	echo "Load too high, starting instance"
+fi
