@@ -44,3 +44,6 @@ done
 sCPU=`cat /tmp/sCPU`
 sRAM=`cat /tmp/sRAM`
 sNET=`cat /tmp/sCPU`
+
+avgCPU=`echo "$sCPU * 100 / $nn" | bc`
+echo $avgCPU
