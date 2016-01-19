@@ -6,20 +6,18 @@ fi
 if [ -z "$RAMTHRESHOLD" ]; then
 	RAMTHRESHOLD=1000
 fi
-if [ -z "$INSTANCESMIN" ]; then
-	INSTANCESMIN=2
-fi
-n=$INSTANCESMIN
+n=`cat /var/run/da.instances.count`
 nn=0
 toCheck=""
 prefix="etherpad_"
+deploy=
 for (( i=1; i<=$n; i++))
 do
 	container=$prefix$i
 	status=`docker ps | grep $container`
 	if [ -z "$status" ]; then
-		echo "$container is down /!\\, starting new"
-		/vagrant/monitoring/launch.sh $i
+		echo "$container is down /!\\"
+		deploy=true
 	else
 		echo "$container is up"
 		toCheck="$toCheck $container"
@@ -57,6 +55,13 @@ echo "Average CPU load: $avgCPU / 10000 - thr: $CPUTHRESHOLD"
 echo "Average RAM load: $avgRAM / 10000 - thr: $RAMTHRESHOLD"
 
 if [ $avgCPU -gt $CPUTHRESHOLD ] || [ $avgRAM -gt $RAMTHRESHOLD ]; then
-	echo "Load too high, starting instance"
-	/vagrant/monitoring/launch.sh
+	id=$(($n + 1))
+	echo "Load too high, starting new instance etherpad_$id"
+	echo $id > "/var/run/da.instances.count"
+	deploy=true
+fi
+
+if [ $deploy ]; then
+	echo "---- Deploy needed, deploying"
+	su vagrant -c "deploy_vagrant"
 fi
