@@ -1,17 +1,11 @@
 #!/bin/bash
 echo "---- Checking if containers are alive"
-if [ -z "$CPUTHRESHOLD" ]; then
-	CPUTHRESHOLD=1000
-fi
-if [ -z "$RAMTHRESHOLD" ]; then
-	RAMTHRESHOLD=1000
-fi
 n=`cat /var/run/da.instances.count`
 nn=0
 toCheck=""
 prefix="etherpad_"
 deploy=
-for (( i=1; i<=$n; i++))
+for (( i=0; i<=$n; i++))
 do
 	container=$prefix$i
 	status=`docker ps | grep $container`
