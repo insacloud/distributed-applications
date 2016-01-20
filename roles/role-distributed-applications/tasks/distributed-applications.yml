@@ -50,6 +50,9 @@
 - name: Create generate_docker_instances_json command
   copy: src=generate_docker_instances_json.sh dest=/usr/bin/generate_docker_instances_json owner=root group=root mode=0755
 
+- name: Create docker_healthcheck command
+  template: src=docker_healthcheck.sh.j2 dest=/usr/bin/docker_healthcheck owner=root group=root mode=0755
+
 - name: Call generate_docker_instances_json command
   shell: generate_docker_instances_json {{da_docker_instances_count.stdout}} > /tmp/lol.yml
 

@@ -1,6 +1,9 @@
 #!/bin/bash
+CPUTHRESHOLD="{{da_docker_instances_cpu_threshold}}"
+RAMTHRESHOLD="{{da_docker_instances_ram_threshold}}"
+INSTANCES_COUNT_FILE="{{da_docker_instances_count_file}}"
 echo "---- Checking if containers are alive"
-n=`cat /var/run/da.instances.count`
+n=`cat $INSTANCES_COUNT_FILE`
 nn=0
 toCheck=""
 prefix="etherpad_"
@@ -51,7 +54,7 @@ echo "Average RAM load: $avgRAM / 10000 - thr: $RAMTHRESHOLD"
 if [ $avgCPU -gt $CPUTHRESHOLD ] || [ $avgRAM -gt $RAMTHRESHOLD ]; then
 	id=$(($n + 1))
 	echo "Load too high, starting new instance etherpad_$id"
-	echo $id > "/var/run/da.instances.count"
+	echo $id > "$INSTANCES_COUNT_FILE"
 	deploy=true
 fi
 

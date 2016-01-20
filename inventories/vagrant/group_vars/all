@@ -6,16 +6,14 @@ da_docker_image_name: "{{da_user}}/etherpad-docker"
 
 da_docker_instances: None # will be initialized in role : main.yml
 da_docker_instances_count_file: /var/run/da.instances.count
-da_docker_instances_count_default: 3
-#da_docker_instances_threshold: 
+da_docker_instances_count_default: 1
+da_docker_instances_cpu_threshold: 1000
+da_docker_instances_ram_threshold: 1000
 
 da_docker_instances: None
 #   - name: etherpad_1
 #     ports: "9000:9001"
 #     address: localhost:9000 # haproxy
-#   - name: etherpad_2
-#     ports: "9001:9001"
-#     address: localhost:9001 # haproxy
 
 ##################################################################### haproxy #
 
