@@ -34,6 +34,27 @@
 - name: Build docker image
   docker_image: "name={{da_docker_image_name}} path={{da_ehterpad_repo_path}} state=build"
 
+- name: Check if docker_instances_count_file exists
+  stat: path="{{da_docker_instances_count_file}}"
+  register: is_docker_instances_count_file
+
+- name: Set default value if file not exists
+  copy: content="{{da_docker_instances_count_default}}" dest="{{da_docker_instances_count_file}}"
+  when: is_docker_instances_count_file.stat.exists == False
+
+- name: Set var with da_docker_instances_count
+  shell: cat "{{da_docker_instances_count_file}}"
+  register: da_docker_instances_count
+  changed_when: False
+
+- name: Create generate_docker_instances_json command
+  copy: src=generate_docker_instances_json.sh dest=/usr/bin/generate_docker_instances_json owner=root group=root mode=0755
+
+- name: Call generate_docker_instances_json command
+  shell: generate_docker_instances_json {{da_docker_instances_count.stdout}} > /tmp/lol.yml
+
+- include_vars: /tmp/lol.yml
+
 - name: Run docker
   docker:
     name: "{{item.name}}"
@@ -42,7 +63,7 @@
     net: bridge
     # expose: "9001"
     ports:
-    - "{{item.ports}}"
+    - "{{item.ports|string}}"
   with_items: "{{da_docker_instances}}"
 
 - name: Run Seagull (docker monitoring)
